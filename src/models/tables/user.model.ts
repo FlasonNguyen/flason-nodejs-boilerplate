@@ -1,72 +1,72 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import { IUser } from '@interfaces';
-import { Database } from '@models';
+import {
+    Table,
+    PrimaryKey,
+    Column,
+    DataType,
+    Model,
+    CreatedAt,
+    UpdatedAt,
+    DeletedAt,
+    Default,
+    AllowNull,
+} from 'sequelize-typescript';
+// import { DataType } from 'sequelize';
 
-const sequelize = Database.sequelize;
+@Table({ tableName: 'user' })
+export class UserModel extends Model<UserModel> {
+    @PrimaryKey
+    @AllowNull
+    @Default(DataType.UUIDV4)
+    @Column({
+        field: 'id',
+        type: DataType.UUID,
+    })
+    id: string;
 
-export type UserAttributes = Optional<IUser, 'id' | 'email' | 'password'>;
+    @Column({ field: 'name', type: DataType.STRING })
+    name: string;
 
-export class UserModel extends Model<IUser, UserAttributes> implements IUser {
-  public id: string;
-  public email: string;
-  public password: string;
+    @Column({
+        field: 'login_type',
+        type: DataType.STRING,
+    })
+    login_type: string;
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+    @Column({
+        field: 'gender',
+        type: DataType.STRING,
+    })
+    gender: string;
+
+    @Column({ field: 'phone', type: DataType.STRING, unique: true })
+    phone: string;
+
+    @Column({ field: 'username', type: DataType.STRING, unique: true })
+    username: string;
+
+    @Column({ field: 'email', type: DataType.STRING, unique: true })
+    email: string;
+
+    @Column({ field: 'password', type: DataType.STRING })
+    password: string;
+
+    @Column({ field: 'avatar', type: DataType.STRING })
+    avatar: string;
+
+    @Column({
+        field: 'type',
+        type: DataType.STRING,
+    })
+    type: string;
+    @CreatedAt
+    @Column({ field: 'created_at' })
+    created_at: Date;
+
+    @UpdatedAt
+    @Column({ field: 'updated_at' })
+    updated_at: Date;
+
+    @DeletedAt
+    @Column({ field: 'deleted_at' })
+    deleted_at: Date;
 }
-
-UserModel.init(
-  {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.STRING,
-    },
-    type: {
-      type: DataTypes.STRING,
-    },
-  },
-  {
-    tableName: 'tbl_user',
-    sequelize,
-    // hooks: {
-    //   beforeCreate: (item: any) => {
-    //     const date = new Date();
-    //     item.created_at_unix_timestamp = date.valueOf();
-    //     item.updated_at_unix_timestamp = date.valueOf();
-    //   },
-    //   beforeUpdate: (item: any) => {
-    //     item.updated_at_unix_timestamp = new Date().valueOf();
-    //   },
-    // },
-    timestamps: true,
-    underscored: true,
-    freezeTableName: true,
-    paranoid: true,
-    defaultScope: {
-      // exclude password
-      attributes: { exclude: ['password', 'deleted_at'] },
-    },
-    // scopes: {
-    //   deleted: {
-    //     // tslint:disable-next-line:no-null-keyword
-    //     where: { deleted_at: { $ne: null } },
-    //     paranoid: false,
-    //   },
-    //   withPassword: {
-    //     attributes: { include: ["password"] },
-    //   },
-    // },
-  },
-);

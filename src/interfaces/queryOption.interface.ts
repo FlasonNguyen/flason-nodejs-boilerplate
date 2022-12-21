@@ -13,3 +13,7 @@ export interface IQueryOption {
 
   [key: string]: any;
 }
+
+export interface ICrudExecOption {
+  allowNull?: boolean;
+}

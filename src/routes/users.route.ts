@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { UsersController } from '@controllers';
+import { UsersController } from '@/controllers';
 import { UserDto } from '@/models/dtos';
-import { IRoute } from '@interfaces';
-import { validationMiddleware } from '@middlewares';
+import { IRoute } from '@/interfaces';
+import { validationMiddleware } from '@/middlewares';
 
 export class UsersRoute implements IRoute {
   public path = '/users';

@@ -1,10 +1,10 @@
-import { Sequelize } from 'sequelize';
+import * as Sequelize from 'sequelize';
 import config from '@config';
 // import { logger } from '@utils';
 
 const { DB_USER, DB_PASSWORD, DB_DATABASE, DB_HOST, DB_PORT } = config.DATABASE;
 
-export const sequelize = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
+const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   dialect: 'postgres',
   host: DB_HOST,
   port: parseInt(DB_PORT, 10),
@@ -37,7 +37,7 @@ export const sequelize = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
 
 // sequelize.authenticate();
 
-export const Database = {
+export {
   sequelize, // connection instance (RAW queries)
   Sequelize, // library
 };

@@ -1,0 +1,28 @@
+# baseURL
+
+###
+# User Signup
+POST http://localhost:1511/auth/signup
+Content-Type: application/json
+
+{
+  "email": "test21@email.com",
+  "password": "password",
+  "role": "user"
+}
+
+###
+# User Login
+POST http://localhost:1511/auth/login
+Content-Type: application/json
+
+{
+  "email": "test21@email.com",
+  "password": "password"
+}
+
+###
+# User Logout
+POST {{ baseURL }}/logout
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMzMWIzNjQ5LWMxMTMtNDM4OC1iYWY4LWM5MTMwY2JkZWUyNyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjcxMzgwMDMxLCJleHAiOjE2NzEzODM2MzF9.W71P4i1BLXhXJtmLboKvZZaC559pQS7a85iTqGTorvI

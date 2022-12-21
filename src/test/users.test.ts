@@ -3,7 +3,7 @@ import { Sequelize } from 'sequelize';
 import request from 'supertest';
 import App from '@/app';
 import { UserDto } from '@/models/dtos';
-import { UsersRoute } from '@routes';
+import { UsersRoute } from '@/routes';
 import { v4 as uuidv4 } from 'uuid';
 
 const examId1 = uuidv4();

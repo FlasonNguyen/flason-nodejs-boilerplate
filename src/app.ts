@@ -6,10 +6,10 @@ import cors from 'cors';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import cookieParser from 'cookie-parser';
-import { IRoute } from '@interfaces';
-import { logger, stream } from '@utils';
-import { errorMiddleware } from '@middlewares';
-import { Database } from '@models';
+import { IRoute } from '@/interfaces';
+import { logger, stream } from '@/utils';
+import { errorMiddleware } from '@/middlewares';
+import { sequelize } from '@/models';
 import config from '@config';
 
 export default class App {
@@ -29,8 +29,8 @@ export default class App {
     this.initializeErrorHandling();
   }
 
-  private connectToDatabase() {
-    Database.sequelize.sync({ force: false });
+  private async connectToDatabase() {
+    await sequelize.sync({ force: false, alter: true });
   }
 
   public listen() {

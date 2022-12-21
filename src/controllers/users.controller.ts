@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { UserDto } from '@/models/dtos';
-import { IUser } from '@interfaces';
-import { UserService } from '@services';
+import { IUser } from '@/interfaces';
+import { UserService } from '@/services';
 
 export class UsersController {
   public userService = new UserService();

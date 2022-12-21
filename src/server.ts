@@ -1,11 +1,9 @@
 import App from '@/app';
-// import AuthRoute from '@routes/auth.route';
-// import IndexRoute from '@routes/index.route';
-// import UsersRoute from '@routes/users.route';
-import { validateEnv } from '@utils';
+import { AuthRoute, IndexRoute, UsersRoute } from '@/routes';
+import { validateEnv } from '@/utils';
 
 new validateEnv();
 
-const app = new App([]);
+const app = new App([new AuthRoute(), new UsersRoute(), new IndexRoute()]);
 
 app.listen();
