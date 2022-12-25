@@ -1,0 +1,40 @@
+import { Request, Response } from 'express';
+import { IQueryOption } from '@/interfaces';
+
+export class BaseRouter {
+  route(fn: (req: Request, res: Response, next: any) => Promise<any>) {
+    return (req: Request, res: Response, next: any) =>
+      fn
+        .bind(this)(req, res, next)
+        .catch((error: any) => {
+          this.onError(res, error);
+        });
+  }
+
+  onError(res: Response, error: Error) {
+    res.status(500).json({ message: error.message });
+  }
+
+  onSuccess(res: Response, object: any = {}, extras: any = {}) {
+    object = object || {};
+    res.status(200).json({ object, ...extras });
+  }
+
+  onSucessPaginate(
+    res: Response,
+    object: any = {},
+    extras: any = {},
+    options: IQueryOption = {
+      offset: 0,
+      limit: 10,
+      where: {},
+    },
+  ) {
+    const page = Math.floor(options.offset / options.limit) + 1;
+    res.status(200).json({
+      object,
+      ...extras,
+      pagination: { current_page: page, next_page: page + 1, prev_page: page - 1, limit: options.limit },
+    });
+  }
+}

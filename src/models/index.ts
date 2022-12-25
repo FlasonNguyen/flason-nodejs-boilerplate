@@ -1,3 +1,3 @@
 export * from './base.pg';
-export * from './tables';
+export * from './entities';
 import './associates';

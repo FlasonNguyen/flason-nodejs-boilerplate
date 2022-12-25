@@ -1,20 +1,19 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import config from '@config';
-import { UserModel } from '@/models';
+import { UserEntity } from '@/models';
 import { UserDto } from '@/models/dtos';
 import { AppException } from '@/common/exceptions';
-import { DataStoredInToken, IUser, TokenData } from '@/interfaces';
+import { DataStoredInToken, IUser } from '@/interfaces';
 import { isEmpty } from '@/utils';
-import {CRUDService} from "@services/crud.service";
-import {ModelCtor} from "sequelize-typescript";
+import { CRUDService } from '@services/crud.service';
+import { ModelCtor } from 'sequelize-typescript';
 
-export class AuthService extends CRUDService<UserModel>{
+export class AuthService extends CRUDService<UserEntity> {
   // public model = UserModel;
-    constructor(model: ModelCtor<UserModel>) {
-        super(model);
-    }
-  // public model = UserModel;
+  constructor() {
+    super(UserEntity);
+  }
 
   public async signup(userData: UserDto): Promise<IUser> {
     if (isEmpty(userData)) throw new AppException(400, 'userData is empty');

@@ -1,13 +1,13 @@
 export interface IQueryOption {
-  filter: any;
+  filter?: any;
   where: any;
-  limit: number;
-  offset: number;
-  scope: string[];
-  order: any[];
-  attributes: any[];
-  includes: any[];
-  distinct: boolean;
+  limit?: number;
+  offset?: number;
+  scope?: string[];
+  order?: any[];
+  attributes?: any[];
+  includes?: any[];
+  distinct?: boolean;
   paranoid?: boolean;
   transaction?: any;
 

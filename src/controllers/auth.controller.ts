@@ -3,19 +3,20 @@ import { UserDto } from '@/models/dtos';
 import { RequestWithUser, IUser } from '@/interfaces';
 import { AuthService } from '@/services';
 import { logger } from '@/utils';
+import { BaseController } from '@controllers/base.controller';
 
-export class AuthController {
-  public authService = new AuthService();
+export class AuthController extends BaseController {
+  public service = new AuthService();
 
   public signUp = async (req: Request, res: Response, next: NextFunction) => {
     logger.debug('Calling Sign-Up endpoint with body: %o', req.body);
     try {
       const userData: UserDto = req.body;
-      const signUpUserData: IUser = await this.authService.signup(userData);
+      const signUpUserData: IUser = await this.service.signup(userData);
 
       res.status(201).json({ data: signUpUserData, message: 'signup' });
     } catch (error) {
-        console.log(error)
+      console.log(error);
       next(error);
     }
   };
@@ -23,7 +24,7 @@ export class AuthController {
   public logIn = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userData: UserDto = req.body;
-      const { cookie, findUser } = await this.authService.login(userData);
+      const { cookie, findUser } = await this.service.login(userData);
 
       res.setHeader('Set-Cookie', [cookie]);
       res.status(200).json({ data: findUser, message: 'login' });
@@ -35,7 +36,7 @@ export class AuthController {
   public logOut = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
       res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
-      res.status(200).json({  message: 'logout' });
+      res.status(200).json({ message: 'logout' });
     } catch (error) {
       next(error);
     }

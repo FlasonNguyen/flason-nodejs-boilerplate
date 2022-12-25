@@ -1,12 +1,16 @@
 import { hash } from 'bcrypt';
-import { UserModel } from '@/models';
+import { UserEntity } from '@/models';
 import { UserDto } from '@/models/dtos';
 import { AppException } from '@/common/exceptions';
 import { IUser } from '@/interfaces';
 import { isEmpty } from '@/utils';
 import { CRUDService } from '@services/crud.service';
 
-export class UserService extends CRUDService<UserModel> {
+export class UserService extends CRUDService<UserEntity> {
+  constructor() {
+    super(UserEntity);
+  }
+
   public async findAllUser(): Promise<UserDto[]> {
     return await this.model.findAll();
   }
@@ -42,10 +46,10 @@ export class UserService extends CRUDService<UserModel> {
     return await this.model.findByPk(userId);
   }
 
-  public async deleteUser(userId: string): Promise<IUser> {
+  public async deleteUser(userId: string): Promise<UserDto> {
     if (isEmpty(userId)) throw new AppException(400, "UsersInterface doesn't existId");
 
-    const findUser: IUser = await this.model.findByPk(userId);
+    const findUser: UserDto = await this.model.findByPk(userId);
     if (!findUser) throw new AppException(409, "UsersInterface doesn't exist");
 
     await this.model.destroy({ where: { id: userId } });

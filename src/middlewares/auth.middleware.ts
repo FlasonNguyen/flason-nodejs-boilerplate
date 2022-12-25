@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 import config from '@config';
-import { UserModel } from '@/models';
+import { UserEntity } from '@/models';
 import { AppException } from '@/common/exceptions';
 import { DataStoredInToken, RequestWithUser } from '@/interfaces';
 
@@ -13,7 +13,7 @@ export const authMiddleware = async (req: RequestWithUser, res: Response, next: 
       const secretKey: string = config.SECRET_KEY;
       const verificationResponse = verify(Authorization, secretKey) as DataStoredInToken;
       const userId = verificationResponse.id;
-      const findUser = await UserModel.findByPk(userId);
+      const findUser = await UserEntity.findByPk(userId);
 
       if (findUser) {
         req.user = findUser;
