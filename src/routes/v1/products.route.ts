@@ -1,19 +1,19 @@
 import {Router} from 'express';
 import {ProductsController} from '@/controllers';
-import {ProductDto} from '@/models/dtos';
 import {IRoute} from '@/interfaces';
-import {validationMiddleware} from '@/middlewares';
+import {CRUDRouter} from '@routes/crud.route';
+import {QueryMiddleware} from '@/middlewares';
 
-export class UsersRoute implements IRoute {
-    public path = '/users';
+export class UsersRoute extends CRUDRouter<ProductsController> implements IRoute {
+    public path = '/products';
     public router = Router();
-    public usersController = new ProductsController();
 
     constructor() {
-        this.initializeRoutes();
+        super(new ProductsController());
+        this.customRouting();
     }
 
-    private initializeRoutes() {
-
+    public customRouting() {
+        this.router.get(`${this.path}`, QueryMiddleware, this.route(this.getList));
     }
 }

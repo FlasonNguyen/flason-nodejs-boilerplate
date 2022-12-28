@@ -20,10 +20,9 @@ export class BaseRouter {
     res.status(200).json({ object, ...extras });
   }
 
-  onSucessPaginate(
+  onSuccessPaginate(
     res: Response,
     object: any = {},
-    extras: any = {},
     options: IQueryOption = {
       offset: 0,
       limit: 10,
@@ -33,7 +32,6 @@ export class BaseRouter {
     const page = Math.floor(options.offset / options.limit) + 1;
     res.status(200).json({
       object,
-      ...extras,
       pagination: { current_page: page, next_page: page + 1, prev_page: page - 1, limit: options.limit },
     });
   }

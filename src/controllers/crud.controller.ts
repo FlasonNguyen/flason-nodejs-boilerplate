@@ -10,23 +10,19 @@ export class CRUDController<T extends CRUDService<any>> extends BaseController {
 
   service: T;
 
-  async getList(option?: IQueryOption) {
-    return await this.service.getList(option);
+  public async getList(queryOption?: IQueryOption): Promise<{ rows: T[]; count: number }> {
+    return await this.service.getList(queryOption);
   }
 
-  async getItem(option?: IQueryOption) {
-    return await this.service.getItem(option);
+  public async getItem(queryOption?: IQueryOption): Promise<T | null> {
+    return await this.service.getItem(queryOption);
   }
 
-  async create(params: any, option?: IQueryOption) {
-    return await this.service.create(params, option);
+  public async create(productData: any, queryOption?: IQueryOption): Promise<T> {
+    return await this.service.create(productData, queryOption);
   }
 
-  async update(params: any, option?: IQueryOption) {
-    return await this.service.update(params, option);
-  }
-
-  async delete(option?: IQueryOption) {
-    return await this.service.delete(option);
+  public async update(productData: any, queryOption?: IQueryOption): Promise<[number, T[]]> {
+    return await this.service.update(productData, queryOption);
   }
 }

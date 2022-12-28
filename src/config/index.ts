@@ -9,6 +9,7 @@ export default {
   LOG_FORMAT: process.env.LOG_FORMAT,
   LOG_DIR: process.env.LOG_DIR,
   ORIGIN: process.env.ORIGIN,
+  PAGESIZE: process.env.PAGESIZE,
   SERVER: {
     PORT: process.env.PORT,
   },

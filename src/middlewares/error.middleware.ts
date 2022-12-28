@@ -13,5 +13,3 @@ export const errorMiddleware = (error: AppException, req: Request, res: Response
     next(error);
   }
 };
-
-// export { errorMiddleware };

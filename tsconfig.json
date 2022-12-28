@@ -49,5 +49,6 @@
         "src/http",
         "src/logs",
         "src/tests"
-    ]
+    ],
+    "files": ["src/types/index.d.ts"]
 }
