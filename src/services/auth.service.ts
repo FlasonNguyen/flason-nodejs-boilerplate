@@ -7,7 +7,6 @@ import { AppException } from '@/common/exceptions';
 import { DataStoredInToken, IUser } from '@/interfaces';
 import { isEmpty } from '@/utils';
 import { CRUDService } from '@services/crud.service';
-import { ModelCtor } from 'sequelize-typescript';
 
 export class AuthService extends CRUDService<UserEntity> {
   // public model = UserModel;

@@ -1,4 +1,4 @@
-import { CreationAttributes, Attributes, CreateOptions, DestroyOptions, UpdateOptions, Optional } from 'sequelize';
+import { CreationAttributes, DestroyOptions, UpdateOptions } from 'sequelize';
 import { IQueryOption } from '@/interfaces';
 import { ModelCtor, Model } from 'sequelize-typescript';
 import { sequelize } from '@/models';

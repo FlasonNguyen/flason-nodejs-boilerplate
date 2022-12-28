@@ -1,23 +1,22 @@
 import { Router } from 'express';
 import { UsersController } from '@/controllers';
 import { UserDto } from '@/models/dtos';
-import { IRoute } from '@/interfaces';
 import { validationMiddleware } from '@/middlewares';
+import { CRUDRouter } from '@routes/crud.route';
 
-export class UsersRoute implements IRoute {
+export class UsersRoute extends CRUDRouter<UsersController> {
   public path = '/users';
-  public router = Router();
-  public usersController = new UsersController();
 
   constructor() {
+    super(new UsersController());
     this.initializeRoutes();
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.usersController.getUsers);
-    this.router.get(`${this.path}/:id`, this.usersController.getUserById);
-    this.router.post(`${this.path}`, validationMiddleware(UserDto, 'body'), this.usersController.createUser);
-    this.router.put(`${this.path}/:id`, validationMiddleware(UserDto, 'body', true), this.usersController.updateUser);
-    this.router.delete(`${this.path}/:id`, this.usersController.deleteUser);
+    this.router.get(`${this.path}`, this.controller.getUsers);
+    this.router.get(`${this.path}/:id`, this.controller.getUserById);
+    this.router.post(`${this.path}`, validationMiddleware(UserDto, 'body'), this.controller.createUser);
+    this.router.put(`${this.path}/:id`, validationMiddleware(UserDto, 'body', true), this.controller.updateUser);
+    this.router.delete(`${this.path}/:id`, this.controller.deleteUser);
   }
 }

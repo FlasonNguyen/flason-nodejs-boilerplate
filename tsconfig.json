@@ -50,5 +50,5 @@
         "src/logs",
         "src/tests"
     ],
-    "files": ["src/types/index.d.ts"]
+    "files": ["src/types/types.d.ts"]
 }

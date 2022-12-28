@@ -1,28 +1,54 @@
-import { BaseController } from '@controllers/base.controller';
-import { CRUDService } from '@services/crud.service';
-import { IQueryOption } from '@/interfaces';
+import {CRUDService} from '@services/crud.service';
+import {Request, Response, NextFunction} from 'express';
+import {BaseController} from '@controllers/base.controller';
 
 export class CRUDController<T extends CRUDService<any>> extends BaseController {
-  constructor(service: T) {
-    super();
-    this.service = service;
-  }
+    protected readonly service: T;
 
-  service: T;
+    constructor(service: T) {
+        super();
+        this.service = service;
+    }
 
-  public async getList(queryOption?: IQueryOption): Promise<{ rows: T[]; count: number }> {
-    return await this.service.getList(queryOption);
-  }
 
-  public async getItem(queryOption?: IQueryOption): Promise<T | null> {
-    return await this.service.getItem(queryOption);
-  }
+    public getList = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const result = await this.service.getList(req.queryInfo);
+            this.onSuccessPaginate(res, result);
+        } catch (error) {
+            this.onError(res, error);
+            next(error);
+        }
+    };
 
-  public async create(productData: any, queryOption?: IQueryOption): Promise<T> {
-    return await this.service.create(productData, queryOption);
-  }
+    public async getItem(req: Request, res: Response, next: NextFunction) {
+        try {
+            req.queryInfo.filter.id = req.params.id;
+            const result = await this.service.getItem(req.queryInfo);
+            this.onSuccess(res, result);
+        } catch (error) {
+            this.onError(res, error);
+            next(error);
+        }
+    }
 
-  public async update(productData: any, queryOption?: IQueryOption): Promise<[number, T[]]> {
-    return await this.service.update(productData, queryOption);
-  }
+    public async create(req: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await this.service.create(req.body);
+            this.onSuccess(res, result);
+        } catch (error) {
+            this.onError(res, error);
+            next(error);
+        }
+    }
+
+    public async update(req: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await this.service.update(req.body);
+            this.onSuccess(res, result);
+        } catch (error) {
+            this.onError(res, error);
+            next(error);
+        }
+    }
 }

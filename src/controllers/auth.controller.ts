@@ -3,10 +3,12 @@ import { UserDto } from '@/models/dtos';
 import { RequestWithUser, IUser } from '@/interfaces';
 import { AuthService } from '@/services';
 import { logger } from '@/utils';
-import { BaseController } from '@controllers/base.controller';
+import { CRUDController } from '@controllers/crud.controller';
 
-export class AuthController extends BaseController {
-  public service = new AuthService();
+export class AuthController extends CRUDController<AuthService> {
+  constructor() {
+    super(new AuthService());
+  }
 
   public signUp = async (req: Request, res: Response, next: NextFunction) => {
     logger.debug('Calling Sign-Up endpoint with body: %o', req.body);
