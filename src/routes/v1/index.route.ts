@@ -8,10 +8,10 @@ export class IndexRoute implements IRoute {
   public indexController = new IndexController();
 
   constructor() {
-    this.initializeRoutes();
+    this.customRouting();
   }
 
-  private initializeRoutes() {
+  private customRouting() {
     this.router.get(`${this.path}`, this.indexController.index);
   }
 }

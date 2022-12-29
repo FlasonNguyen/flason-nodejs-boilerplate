@@ -11,11 +11,11 @@ export class AuthRoute implements IRoute {
   public authController = new AuthController();
 
   constructor() {
-    this.initializeRoutes();
+    this.customRouting();
   }
 
-  private initializeRoutes() {
-    this.router.post(`${this.path}signup`, validationMiddleware(UserDto, 'body'),this.authController.signUp);
+  private customRouting() {
+    this.router.post(`${this.path}signup`, validationMiddleware(UserDto, 'body', true), this.authController.signUp);
     this.router.post(`${this.path}login`, validationMiddleware(UserDto, 'body', true), this.authController.logIn);
     this.router.post(`${this.path}logout`, authMiddleware, this.authController.logOut);
   }

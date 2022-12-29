@@ -1,10 +1,18 @@
-import * as Sequelize from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
 import config from '@config';
-// import { logger } from '@utils';
+import * as entities from '@models/entities';
+import { logger } from '@/utils';
 
 const { DB_USER, DB_PASSWORD, DB_DATABASE, DB_HOST, DB_PORT } = config.DATABASE;
 
-const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
+const entitiesArray = [];
+for (const elementEntity of Object.values(entities)) {
+  entitiesArray.push({
+    provide: elementEntity,
+    useValue: elementEntity,
+  });
+}
+const sequelize = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   dialect: 'postgres',
   host: DB_HOST,
   port: parseInt(DB_PORT, 10),
@@ -33,6 +41,7 @@ const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   // },
   logging: false,
   benchmark: true,
+  models: [...Object.values(entities)],
 });
 
 // sequelize.authenticate();

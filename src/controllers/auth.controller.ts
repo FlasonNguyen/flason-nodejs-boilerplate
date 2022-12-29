@@ -29,7 +29,7 @@ export class AuthController extends CRUDController<AuthService> {
       const { cookie, findUser } = await this.service.login(userData);
 
       res.setHeader('Set-Cookie', [cookie]);
-      res.status(200).json({ data: findUser, message: 'login' });
+      res.status(200).json({ data: findUser, accessToken: 'login' });
     } catch (error) {
       next(error);
     }

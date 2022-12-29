@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { UserDto } from '@/models/dtos';
 import { UserService } from '@/services';
 import { CRUDController } from '@controllers/crud.controller';
+import { AppException } from '@/common/exceptions';
+import { logger } from '@/utils';
 
 export class UsersController extends CRUDController<UserService> {
   constructor() {
@@ -9,11 +11,15 @@ export class UsersController extends CRUDController<UserService> {
   }
 
   public getUsers = async (req: Request, res: Response, next: NextFunction) => {
+    console.log('CONTROLLER');
     try {
       const findAllUsersData: UserDto[] = await this.service.findAllUser();
-
-      res.status(200).json({ data: findAllUsersData, message: 'findAll' });
+      this.onSuccessPaginate(res, findAllUsersData);
+      // res.status(200).json({ data: findAllUsersData, message: 'findAll' });
     } catch (error) {
+      // console.log(error);
+      // logger.error(error);
+      // this.onError(res, new AppException(error.status, error.message));
       next(error);
     }
   };

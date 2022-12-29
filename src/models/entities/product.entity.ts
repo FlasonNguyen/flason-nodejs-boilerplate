@@ -12,12 +12,14 @@ import {
   Validate,
   Scopes,
   DefaultScope,
+  Index,
 } from 'sequelize-typescript';
 import { Category } from '@/common/constants';
 import { IProduct } from '@/interfaces';
 
 @Table({ tableName: 'product' })
 export class ProductEntity extends Model<ProductEntity> implements IProduct {
+  @Index
   @PrimaryKey
   @AllowNull
   @Default(DataType.UUIDV4)
@@ -27,6 +29,7 @@ export class ProductEntity extends Model<ProductEntity> implements IProduct {
   })
   id: string;
 
+  @Index
   @Column({ field: 'title', type: DataType.STRING })
   title: string;
 

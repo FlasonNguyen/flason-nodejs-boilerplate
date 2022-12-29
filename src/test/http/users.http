@@ -14,19 +14,20 @@ Content-Type: application/json
 {
   "email": "example2@email.com",
   "password": "password",
-  "role": "user"
+  "role": "USER"
 }
 
 ###
 # Modify User By Id
-PUT {{ baseURL }}/users/331b3649-c113-4388-baf8-c9130cbdee27
+PUT {{ baseURL }}/users/059ea3ca-b08a-44f7-9408-879c35410ce9
 Content-Type: application/json
 
 {
-    "email": "flason@email.com",
-	"password": "password"
+  "email": "example12@email.com",
+  "password": "password",
+  "role": "USER"
 }
 
 ###
 # Delete User By Id
-DELETE {{ baseURL }}/users/331b3649-c113-4388-baf8-c9130cbdee27
+DELETE {{ baseURL }}/users/059ea3ca-b08a-44f7-9408-879c35410ce9

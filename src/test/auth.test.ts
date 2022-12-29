@@ -17,9 +17,10 @@ afterAll(async () => {
 describe('Testing Auth', () => {
     describe('[POST] /signup', () => {
         it('response should have the Create userData', async () => {
-            const userData: { password: string; email: string } = {
+            const userData: { password: string; email: string; role: string } = {
                 email: 'test@email.com',
                 password: 'q1w2e3r4!',
+                role: "USER"
             };
 
             const authRoute = new AuthRoute();

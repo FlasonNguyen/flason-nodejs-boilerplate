@@ -1,10 +1,11 @@
 import * as _ from 'lodash';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { logger } from '@/utils';
+import * as console from 'console';
 
-export const QueryMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const QueryMiddleware = (req: any, res: Response, next: NextFunction) => {
   // Main Middleware
-  const filter = parseFilter(req);
+  const where = _parseWhere(req);
   const order = parseOrder(req);
   const page = parseInt(String(req.query.page || 1));
   const limit = parseInt(String(req.query.limit || 10));
@@ -17,7 +18,7 @@ export const QueryMiddleware = (req: Request, res: Response, next: NextFunction)
 
   req.queryInfo = _.merge(
     {
-      filter,
+      where,
       limit,
       page,
       offset,
@@ -25,34 +26,51 @@ export const QueryMiddleware = (req: Request, res: Response, next: NextFunction)
     },
     fields,
   );
-  logger.info(req.queryInfo);
   next();
 };
 
-const parseFilter = (req: Request): any => {
-  return JSON.parse(String(req.query.filter)) || {};
+const _parseWhere = (req: any): any => {
+  let where = req.query['where'];
+
+  try {
+    where = JSON.parse(where);
+  } catch (ignore) {
+    where = undefined;
+  }
+  return where || {};
 };
 
-const parseOrder = (req: Request): [] => {
-  return JSON.parse(String(req.query.order)) || [['updated_at', 'asc']];
+const parseOrder = (req: any): any => {
+  let order = req.query['order'];
+  try {
+    order = JSON.parse(order);
+  } catch (ignore) {
+    order = undefined;
+  }
+  return order || [['updated_at', 'asc']];
 };
 
-const parseFields = (req: Request): any => {
-  const fields = JSON.parse(String(req.query.fields)) || [];
+const parseFields = (req: any): any => {
+  let fields = req.query['fields'];
+  try {
+    fields = JSON.parse(fields);
+  } catch (ignore) {
+    fields = [];
+  }
   try {
     return parseAttributes(fields);
-  } catch (error) {
+  } catch (err) {
     return null;
   }
 };
 
-const parseAttributes = (fields: object) => {
-  const attributes: any[] = [];
+const parseAttributes = (attrs: any) => {
+  const attributes: any[] | any = ['id', 'created_at', 'updated_at'];
   const includes: any[] = [];
   let isGetAll = false;
   let isSetParanoid = false;
   let where: any = undefined;
-  _.forEach(fields, function (f) {
+  _.forEach(attrs, function (f) {
     if (typeof f === 'string') {
       switch (f) {
         case '$all':
@@ -67,9 +85,9 @@ const parseAttributes = (fields: object) => {
     } else if (typeof f === 'object' && !Array.isArray(f)) {
       _.forEach(
         f,
-        function (value: any, name: string) {
+        ((value: any, name: string) => {
           switch (name) {
-            case '$filter':
+            case '$where':
               where = _.merge({}, where, value);
               break;
             default:
@@ -77,21 +95,26 @@ const parseAttributes = (fields: object) => {
                 [name]: value,
               });
           }
-        }.bind(this),
+        }).bind(this),
       );
     }
   });
   const include = parseInclude(includes);
   const result: any = {
-    include,
-    distinct: !!includes,
+    include: include,
+    distinct: includes ? true : false,
   };
-  if (where) result.where;
+  if (where) result.where = where;
   if (!isGetAll) {
     result.attributes = attributes;
   }
   if (isSetParanoid) {
     result.paranoid = false;
+  }
+  if (result.attributes == undefined) {
+    result.attributes = { exclude: ['password'] };
+  } else {
+    result.attributes = result.attributes.filter((e: string) => e !== 'password');
   }
   return result;
 };
@@ -100,11 +123,23 @@ const parseInclude = (includes: any) => {
   if (includes.length === 0) return includes;
 
   const associates: any[] = [];
-  _.forEach(includes, function (include: any) {
-    _.forEach(include, function (attrs: any, name: string) {
-      const associate = Object.assign({ association: name }, ...parseAttributes(attrs));
-      associates.push(associate);
-    }).bind(this);
-  });
+  _.forEach(
+    includes,
+    ((i: any) => {
+      _.forEach(
+        i,
+        ((attrs: any, name: string) => {
+          const associate = Object.assign(
+            {
+              association: name,
+            },
+            parseAttributes(attrs),
+          );
+          associates.push(associate);
+        }).bind(this),
+      );
+    }).bind(this),
+  );
   return associates;
 };
+
