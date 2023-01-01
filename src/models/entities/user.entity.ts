@@ -58,9 +58,6 @@ export class UserEntity extends Model<UserEntity> implements IUser {
     @Column({field: 'phone', type: DataType.STRING, unique: true})
     phone: string;
 
-    @Column({field: 'username', type: DataType.STRING, unique: true})
-    username: string;
-
     @Index
     @Column({field: 'email', type: DataType.STRING, unique: true})
     email: string;
@@ -71,11 +68,6 @@ export class UserEntity extends Model<UserEntity> implements IUser {
     @Column({field: 'avatar', type: DataType.STRING})
     avatar: string;
 
-    @Column({
-        field: 'type',
-        type: DataType.STRING,
-    })
-    type: string;
     @CreatedAt
     @Column({field: 'created_at'})
     created_at: Date;

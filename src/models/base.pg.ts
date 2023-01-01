@@ -1,7 +1,7 @@
-import { Sequelize } from 'sequelize-typescript';
+import { ModelCtor, Sequelize } from 'sequelize-typescript';
 import config from '@config';
 import * as entities from '@models/entities';
-import { logger } from '@/utils';
+import { AppException } from '@/common/exceptions';
 
 const { DB_USER, DB_PASSWORD, DB_DATABASE, DB_HOST, DB_PORT } = config.DATABASE;
 
@@ -45,7 +45,6 @@ const sequelize = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
 });
 
 // sequelize.authenticate();
-
 export {
   sequelize, // connection instance (RAW queries)
   Sequelize, // library

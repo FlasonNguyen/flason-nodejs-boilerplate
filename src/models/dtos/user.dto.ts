@@ -4,7 +4,7 @@ import { IUser } from '@/interfaces';
 
 export class UserDto implements IUser {
   @IsUUID()
-  public id: string;
+  public id?: string;
   @IsEmail()
   public email: string;
 
