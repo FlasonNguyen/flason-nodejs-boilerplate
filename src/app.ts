@@ -10,6 +10,7 @@ import {IRoute} from '@/interfaces';
 import {logger, stream} from '@/utils';
 import {errorMiddleware} from '@/middlewares';
 import {sequelize} from '@/models';
+import cluster from 'cluster';
 import config from '@config';
 
 export default class App {
@@ -29,8 +30,9 @@ export default class App {
         this.initializeErrorHandling();
     }
 
+    // TODO: Apply Cluster
     private connectToDatabase() {
-        sequelize.sync({force: false, alter: true});
+        sequelize.sync({force: false, alter: cluster.isPrimary});
     }
 
     public listen() {
